@@ -1,0 +1,6 @@
+django==5.2.17
+djangorestframework==3.18.1
+django-filter==26.1
+psycopg[binary]==3.3.6
+aiogram==3.31.0
+markdown==3.10.3
