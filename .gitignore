@@ -1,0 +1,9 @@
+opencode.json
+
+node_modules/
+.agents/
+.venv/
+venv/
+.env
+.env.*
+!.env.example
