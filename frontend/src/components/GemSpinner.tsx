@@ -79,16 +79,16 @@ function GemSpinner() {
 
     const renderer = new WebGLRenderer({ antialias: true, alpha: true })
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5))
-    const size = container.clientWidth || 32
+    const size = container.clientWidth || 40
     renderer.setSize(size, size)
     renderer.setClearColor(0x000000, 0)
     container.appendChild(renderer.domElement)
 
     const geometry = createGemGeometry()
     const material = new MeshPhongMaterial({
-      color: 0xc0c0c0,
-      specular: 0xffffff,
-      shininess: 110,
+      color: 0x10f393,
+      specular: 0x66b89a,
+      shininess: 18,
       flatShading: true,
       polygonOffset: true,
       polygonOffsetFactor: 1,
@@ -98,16 +98,16 @@ function GemSpinner() {
     gem.rotation.set(0.16, 0, 0.38)
 
     const edges = new EdgesGeometry(geometry)
-    const edgeMaterial = new LineBasicMaterial({ color: 0x000000 })
+    const edgeMaterial = new LineBasicMaterial({ color: 0xffffff })
     gem.add(new LineSegments(edges, edgeMaterial))
     scene.add(gem)
 
-    const ambient = new AmbientLight(0xffffff, 0.5)
-    const key = new DirectionalLight(0xffffff, 1.8)
+    const ambient = new AmbientLight(0xffffff, 0.75)
+    const key = new DirectionalLight(0xffffff, 1.2)
     key.position.set(2, 4, 3)
-    const rim = new DirectionalLight(0xe4e4e7, 0.9)
+    const rim = new DirectionalLight(0xd6fff0, 0.7)
     rim.position.set(-3, 0.5, -2)
-    const spark = new PointLight(0xffffff, 1.6, 0, 0)
+    const spark = new PointLight(0xffffff, 0.7, 0, 0)
     spark.position.set(-1.5, 2.5, 3)
     scene.add(ambient, key, rim, spark)
 
@@ -115,7 +115,7 @@ function GemSpinner() {
     const clock = new Clock()
 
     const tick = () => {
-      gem.rotation.y += clock.getDelta() * 0.7
+      gem.rotation.y += clock.getDelta() * 0.45
       renderer.render(scene, camera)
       rafId = requestAnimationFrame(tick)
     }

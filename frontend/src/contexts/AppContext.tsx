@@ -22,7 +22,7 @@ export function AppProvider({
   children,
 }: AppProviderProps) {
   const value = {
-    platform: getPlatform(),
+    platform: getPlatform() as Platform,
     user: getUser(),
   };
 
