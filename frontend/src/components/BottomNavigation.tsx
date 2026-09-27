@@ -1,4 +1,4 @@
-import { Home, Grid, ShoppingBag, Truck, UserRound } from "lucide-react"
+import { Home, Store, ShoppingBag, History, UserRound } from "lucide-react"
 import { useLocation, useNavigate } from "react-router-dom"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
@@ -14,10 +14,10 @@ interface NavItem {
 
 const navItems: NavItem[] = [
   { id: "home", label: "خانه", icon: Home, href: "/" },
-  { id: "categories", label: "دسته‌بندی", icon: Grid, href: "/categories" },
+  { id: "shop", label: "فروشگاه آنلاین", icon: Store, href: "/shop" },
   { id: "cart", label: "سبد خرید", icon: ShoppingBag, href: "/cart", isCenter: true },
-  { id: "orders", label: "سفارش‌ها", icon: Truck, href: "/orders" },
-  { id: "profile", label: "پروفایل", icon: UserRound, href: "/profile" },
+  { id: "orders", label: "سوابق سفارشات", icon: History, href: "/orders" },
+  { id: "profile", label: "مشخصات", icon: UserRound, href: "/profile" },
 ]
 
 interface BottomNavigationProps {
@@ -103,7 +103,7 @@ function BottomNavigation({ cartCount = 0, className }: BottomNavigationProps) {
             >
               <div className="flex flex-col items-center justify-center gap-1 h-full">
                 <Icon className={cn("size-5 transition-transform", isActive && "scale-110")} aria-hidden="true" />
-                <span className={cn("text-[10px] font-medium leading-none", isActive && "text-primary")}>
+                <span className={cn("w-full truncate text-center text-[10px] font-medium leading-none", isActive && "text-primary")}>
                   {item.label}
                 </span>
               </div>

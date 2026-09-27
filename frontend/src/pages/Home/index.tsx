@@ -1,109 +1,41 @@
 import { useApp } from "@/contexts/AppContext"
+import { useNavigate } from "react-router-dom"
 import { AppHeader } from "@/components/AppHeader"
-import { ProductGrid } from "@/components/ProductCard"
 import { BottomNavigation } from "@/components/BottomNavigation"
-import { Card, CardContent } from "@/components/ui/card"
-import { Star, Gem } from "lucide-react"
-import type { ProductVariant } from "@/components/ProductCard"
+import { ChevronLeft, Gem, History, ShoppingCart, Store, UserRound } from "lucide-react"
 
-const featureCards = [
+const homeActions = [
   {
-    icon: Gem,
-    title: "اکسسوری و ست‌های شیک",
-    description: "ست گردنبند، دست‌بند و گوشواره با طراحی‌های خاص و چشم‌نواز",
-    color: "primary",
+    icon: UserRound,
+    label: "مشخصات کاربری",
+    description: "مشاهده و ویرایش اطلاعات",
+    href: "/profile",
   },
   {
-    icon: Star,
-    title: "کیفیت عالی و ضدحساسیت",
-    description: "تمام محصولات ما با مواد درجه‌یک و استاندارد بهداشتی ساخته شده‌اند",
-    color: "secondary",
+    icon: Store,
+    label: "فروشگاه آنلاین",
+    description: "مشاهده محصولات و ثبت سفارش",
+    href: "/shop",
+  },
+  {
+    icon: ShoppingCart,
+    label: "سبد خرید و تکمیل خرید",
+    description: "مشاهده سبد خرید و تکمیل پرداخت",
+    href: "/cart",
+  },
+  {
+    icon: History,
+    label: "سوابق سفارشات",
+    description: "مشاهده وضعیت سفارش‌ها",
+    href: "/orders",
   },
 ] as const
 
-const mockVariants: ProductVariant[] = [
-  {
-    id: "1",
-    productId: "1",
-    productName: "گردنبند الماسی عروس",
-    productSlug: "diamond-bride-necklace",
-    color: "طلایی",
-    colorHex: "#B08D57",
-    size: "45cm",
-    price: 45000000,
-    image: "/products/necklace1.jpg",
-    inStock: true,
-  },
-  {
-    id: "2",
-    productId: "2",
-    productName: "حلقه طلای ۱۸ عیار",
-    productSlug: "18k-gold-ring",
-    color: "طلایی",
-    colorHex: "#D8C3A5",
-    size: "۱۷",
-    price: 12500000,
-    image: "/products/ring1.jpg",
-    inStock: true,
-  },
-  {
-    id: "3",
-    productId: "3",
-    productName: "انگشتر یاقوت زهر",
-    productSlug: "ruby-ring",
-    color: "نقره‌ای",
-    colorHex: "#C0C0C0",
-    size: "۱۵",
-    price: 8900000,
-    image: "/products/ring2.jpg",
-    inStock: true,
-  },
-  {
-    id: "4",
-    productId: "4",
-    productName: "دستبند طلا با الماس",
-    productSlug: "gold-diamond-bracelet",
-    color: "طلایی",
-    colorHex: "#B08D57",
-    size: "۱۸cm",
-    price: 32000000,
-    image: "/products/bracelet1.jpg",
-    inStock: false,
-  },
-  {
-    id: "5",
-    productId: "5",
-    productName: "آویز یاقوت آبی",
-    productSlug: "blue-sapphire-pendant",
-    color: "نقره‌ای",
-    colorHex: "#C0C0C0",
-    size: "۲cm",
-    price: 15600000,
-    image: "/products/pendant1.jpg",
-    inStock: true,
-  },
-  {
-    id: "6",
-    productId: "6",
-    productName: "حلقه الماس سولیتیر",
-    productSlug: "solitaire-diamond-ring",
-    color: "طلایی",
-    colorHex: "#D8C3A5",
-    size: "۱۶",
-    price: 55000000,
-    image: "/products/ring3.jpg",
-    inStock: true,
-  },
-]
-
 function Home() {
   const { user } = useApp()
+  const navigate = useNavigate()
   const firstName = user?.first_name || "علی"
   const lastName = user?.last_name || "رضایی"
-
-  const handleAddToCart = (variantId: string) => {
-    console.log("Add to cart:", variantId)
-  }
 
   const cartCount = 3
 
@@ -119,31 +51,25 @@ function Home() {
             به فروشگاه ستیا خوش آمدید!
           </h1>
         </section>
-        <section className="mt-6 space-y-4" aria-label="ویژگی‌های فروشگاه">
-          <div className="grid gap-3">
-            {featureCards.map(({ icon: Icon, title, description, color }) => (
-              <Card key={title} variant={color as "primary" | "secondary" | "default"} className="shadow-setia transition-all duration-200 hover:shadow-setia-hover">
-                <CardContent className="flex items-start gap-4 p-4">
-                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                    <Icon className="size-6" aria-hidden="true" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <h3 className="font-semibold text-foreground">{title}</h3>
-                    <p className="text-sm text-muted-foreground mt-1">{description}</p>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </section>
-        <ProductGrid
-          variants={mockVariants}
-          onAddToCart={handleAddToCart}
-          cartItems={new Map([["1", 1], ["3", 2]])}
-          title="محصولات پیشنهادی"
-          showViewAll
-          viewAllHref="/products"
-        />
+        <nav className="mt-6 flex flex-col gap-3" aria-label="دسترسی سریع">
+          {homeActions.map(({ icon: Icon, label, description, href }) => (
+            <button
+              key={label}
+              type="button"
+              onClick={() => navigate(href)}
+              className="flex w-full items-center gap-4 rounded-[20px] border border-border bg-card p-4 text-right shadow-setia transition-all duration-200 ease-out tap-highlight-transparent hover:border-primary/30 hover:shadow-setia-hover active:scale-[0.99] focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:outline-none"
+            >
+              <span className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                <Icon className="size-6" aria-hidden="true" />
+              </span>
+              <span className="flex min-w-0 flex-1 flex-col gap-0.5">
+                <span className="text-sm font-semibold text-foreground">{label}</span>
+                <span className="text-xs text-muted-foreground">{description}</span>
+              </span>
+              <ChevronLeft className="size-4 shrink-0 text-muted-foreground" aria-hidden="true" />
+            </button>
+          ))}
+        </nav>
       </main>
       <BottomNavigation cartCount={cartCount} />
     </div>
