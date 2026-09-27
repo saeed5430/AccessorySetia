@@ -41,7 +41,11 @@ function Home() {
 
   return (
     <div className="flex min-h-dvh flex-col bg-background text-foreground pb-[calc(72px+env(safe-area-inset-bottom))]">
-      <AppHeader firstName={firstName} lastName={lastName} />
+      <AppHeader
+        firstName={firstName}
+        lastName={lastName}
+        username={user?.username}
+      />
       <main className="mx-auto w-full max-w-lg flex-1 px-4 pt-6 pb-4">
         <section className="flex flex-col items-center gap-3" aria-label="خوش‌آمدگویی">
           <div className="flex size-16 items-center justify-center rounded-full bg-setia-gem/10 ring-1 ring-setia-gem/30">

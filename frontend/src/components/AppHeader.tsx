@@ -8,10 +8,11 @@ const GemSpinner = lazy(() =>
 type AppHeaderProps = {
   firstName: string
   lastName: string
+  username?: string
   avatarUrl?: string
 }
 
-function AppHeader({ firstName, lastName, avatarUrl }: AppHeaderProps) {
+function AppHeader({ firstName, lastName, username, avatarUrl }: AppHeaderProps) {
   const initials = `${firstName.charAt(0)}${lastName.charAt(0)}`
 
   return (
@@ -28,7 +29,7 @@ function AppHeader({ firstName, lastName, avatarUrl }: AppHeaderProps) {
           <p className="truncate text-base font-semibold text-foreground">
             سلام {firstName} {lastName}
           </p>
-          <p className="text-xs text-muted-foreground">فروشگاه ستیا</p>
+          <p className="text-xs text-muted-foreground">{username}</p>
         </div>
 
         <div className="shrink-0">
