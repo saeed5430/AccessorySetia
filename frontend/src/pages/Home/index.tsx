@@ -34,8 +34,11 @@ const homeActions = [
 function Home() {
   const { user } = useApp()
   const navigate = useNavigate()
-  const firstName = user?.first_name || "علی"
-  const lastName = user?.last_name || "رضایی"
+
+  const firstName = user?.first_name ?? ""
+  const lastName = user?.last_name ?? ""
+  const username = user?.username ?? undefined
+  const avatarUrl = user?.avatar_url ?? undefined
 
   const cartCount = 3
 
@@ -44,7 +47,8 @@ function Home() {
       <AppHeader
         firstName={firstName}
         lastName={lastName}
-        username={user?.username}
+        username={username}
+        avatarUrl={avatarUrl}
       />
       <main className="mx-auto w-full max-w-lg flex-1 px-4 pt-6 pb-4">
         <section className="flex flex-col items-center gap-3" aria-label="خوش‌آمدگویی">

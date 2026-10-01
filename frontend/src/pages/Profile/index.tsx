@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
@@ -6,20 +6,21 @@ import { Check, ChevronRight, ClipboardList, Save } from "lucide-react"
 import { BottomNavigation } from "@/components/BottomNavigation"
 import { Button } from "@/components/ui/button"
 import { useApp } from "@/contexts/AppContext"
+import type { AppUser } from "@/types/account"
 import { ProfileField } from "./ProfileField"
 import { ProfileIdentity } from "./ProfileIdentity"
 import { profileSchema, type ProfileValues } from "./schema"
 
 function Profile() {
-  const { user, platform } = useApp()
+  const { user, platform, updateProfile } = useApp()
   const navigate = useNavigate()
-  const [saved, setSaved] = useState(false)
 
   const {
     register,
     handleSubmit,
     reset,
-    formState: { errors, isDirty },
+    setError,
+    formState: { errors, isSubmitting },
   } = useForm<ProfileValues>({
     resolver: zodResolver(profileSchema),
     mode: "onSubmit",
@@ -27,18 +28,75 @@ function Profile() {
     defaultValues: {
       firstName: user?.first_name ?? "",
       lastName: user?.last_name ?? "",
-      phone: "",
-      address: "",
-      postalCode: "",
+      phone: user?.mobile_number ?? "",
+      address: user?.address ?? "",
+      postalCode: user?.postal_code ?? "",
     },
   })
 
-  const onSubmit = handleSubmit((values) => {
-    reset(values)
-    setSaved(true)
+  useEffect(() => {
+    reset({
+      firstName: user?.first_name ?? "",
+      lastName: user?.last_name ?? "",
+      phone: user?.mobile_number ?? "",
+      address: user?.address ?? "",
+      postalCode: user?.postal_code ?? "",
+    })
+  }, [user, reset])
+
+  const onSubmit = handleSubmit(async (values: ProfileValues) => {
+    const result = await updateProfile({
+      first_name: values.firstName,
+      last_name: values.lastName,
+      mobile_number: values.phone,
+      address: values.address,
+      postal_code: values.postalCode ? values.postalCode : null,
+    })
+
+    if (result.success) {
+      reset(values)
+      navigate("/")
+      return
+    }
+
+    if (result.fieldErrors) {
+      const fieldMap: Record<
+        string,
+        "firstName" | "lastName" | "phone" | "address" | "postalCode"
+      > = {
+        first_name: "firstName",
+        last_name: "lastName",
+        mobile_number: "phone",
+        address: "address",
+        postal_code: "postalCode",
+      }
+
+      for (const [backendField, message] of Object.entries(result.fieldErrors)) {
+        const frontendField = fieldMap[backendField as keyof typeof fieldMap]
+        if (frontendField) {
+          setError(frontendField, { type: "server", message })
+        } else {
+          setError("root", { type: "server", message })
+        }
+      }
+      return
+    }
+
+    setError("root", {
+      type: "server",
+      message: result.message ?? "ذخیره اطلاعات ناموفق بود.",
+    })
   })
 
-  const showSaved = saved && !isDirty
+  const accountForIdentity: AppUser | null = user
+    ? {
+        id: user.id,
+        first_name: user.first_name ?? "",
+        last_name: user.last_name ?? undefined,
+        username: user.username ?? undefined,
+        photo_url: user.avatar_url ?? undefined,
+      }
+    : null
 
   return (
     <div className="flex min-h-dvh flex-col bg-background text-foreground pb-[calc(72px+env(safe-area-inset-bottom))]">
@@ -57,7 +115,10 @@ function Profile() {
       </div>
 
       <main className="mx-auto flex w-full max-w-lg flex-1 flex-col gap-4 px-4 pt-2 pb-4">
-        <ProfileIdentity user={user} platform={platform} />
+        <ProfileIdentity
+          user={accountForIdentity as any}
+          platform={platform}
+        />
 
         <form onSubmit={onSubmit} noValidate className="flex flex-col gap-4">
           <section
@@ -131,24 +192,33 @@ function Profile() {
             </div>
           </section>
 
-          {showSaved && (
+          {errors.root?.message && (
+            <div
+              role="alert"
+              className="rounded-[16px] border border-destructive/30 bg-destructive/10 p-3 text-sm text-destructive"
+            >
+              {errors.root.message}
+            </div>
+          )}
+
+          <Button type="submit" size="lg" className="h-12 w-full text-base" disabled={isSubmitting}>
+            <Save aria-hidden="true" data-icon="inline-start" />
+            {isSubmitting ? "در حال ذخیره..." : "ذخیره اطلاعات"}
+          </Button>
+
+          {user?.is_profile_completed && (
             <div
               role="status"
-              className="animate-slide-up flex items-center gap-3 rounded-[16px] border border-primary/30 bg-primary/10 p-3"
+              className="flex items-center gap-3 rounded-[16px] border border-primary/30 bg-primary/10 p-3"
             >
               <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground">
                 <Check className="size-4" aria-hidden="true" />
               </span>
               <p className="text-sm font-medium text-foreground">
-                اطلاعات شما ذخیره شد
+                پروفایل شما کامل است
               </p>
             </div>
           )}
-
-          <Button type="submit" size="lg" className="h-12 w-full text-base">
-            <Save aria-hidden="true" data-icon="inline-start" />
-            ذخیره اطلاعات
-          </Button>
         </form>
       </main>
 

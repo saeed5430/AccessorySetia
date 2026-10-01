@@ -1,7 +1,7 @@
 import type { AppUser } from "../types/account";
 
 export const getBaleUser = (): AppUser | null => {
-  const user = (window as any).Bale?.WebApp?.user;
+  const user = (window as any).Bale?.WebApp?.initDataUnsafe?.user;
 
   if (!user) {
     return null;

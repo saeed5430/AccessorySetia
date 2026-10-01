@@ -12,7 +12,7 @@ shadcn/ui
 Python
 Django
 Django REST Framework
-PostgreSQL
+MariaDB
 django-filter
 
 Aiogram 3
