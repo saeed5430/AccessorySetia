@@ -23,13 +23,19 @@ import os
 
 SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
 
-DEBUG = os.environ.get("DJANGO_DEBUG", "True").lower() in {"1", "true", "yes"}
+# DEBUG = os.environ.get("DJANGO_DEBUG", "True").lower() in {"1", "true", "yes"}
+DEBUG = False
 
 ALLOWED_HOSTS = [
     host.strip()
     for host in os.environ.get("DJANGO_ALLOWED_HOSTS", "").split(",")
     if host.strip()
 ]
+
+ALLOWED_HOSTS += [
+'127.0.0.1', 'www.setiyaapp.ir','setiyaapp.ir'
+]
+
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -115,7 +121,9 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 
-STATIC_ROOT = BASE_DIR / "staticfiles"
+# STATIC_ROOT = BASE_DIR / "staticfiles"
+STATIC_ROOT = BASE_DIR / "static"
+
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
