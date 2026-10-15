@@ -23,4 +23,5 @@ export const getTelegramInitData = (): string => {
 
 export const readyTelegram = (): void => {
   window.Telegram?.WebApp?.ready();
+  window.Telegram?.WebApp?.expand();
 };

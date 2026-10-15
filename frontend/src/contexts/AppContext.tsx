@@ -116,7 +116,7 @@ const AppProvider = ({ children }: AppProviderProps) => {
   const [authError, setAuthError] = useState<string | null>(null)
 
   const platform = useMemo(() => getPlatform(), [])
-  const isDev = platform === "web"
+  const isDev = import.meta.env.DEV && platform === "web"
 
   const messengerUser = useMemo(
     () => (isDev ? getDevUser() : getMessengerUser()),

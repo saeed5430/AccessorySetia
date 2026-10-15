@@ -22,4 +22,5 @@ export const getBaleInitData = (): string => {
 
 export const readyBale = (): void => {
   (window as any).Bale?.WebApp?.ready?.();
+  (window as any).Bale?.WebApp?.expand?.();
 };

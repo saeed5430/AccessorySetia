@@ -26,7 +26,7 @@ type RequestOptions = {
 
 const refreshAccessToken = async (): Promise<string | null> => {
   try {
-    const response = await fetch("/api/account/token/refresh/", {
+    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/token/refresh/`, {
       method: "POST",
       credentials: "include",
     })
@@ -64,7 +64,7 @@ export const apiRequest = async <T>(
     headers["Authorization"] = `Bearer ${accessToken}`
   }
 
-  const response = await fetch(`/api/account${path}`, {
+  const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}${path}`, {
     method,
     headers,
     credentials: "include",
